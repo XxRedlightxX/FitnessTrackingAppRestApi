@@ -1,0 +1,27 @@
+<?php
+
+namespace App\Models;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class exercice extends Model
+{
+    use HasFactory;
+
+        protected $table = 'exercice';
+       protected $fillable = ['name', 'category', 'description'];
+
+    // Many-to-many with muscle groups
+    public function muscleGroups()
+    {
+        return $this->belongsToMany(MuscleGroup::class, 'exercice_muscle_group');
+    }
+
+    // Many-to-many with workout sessions via pivot table (exercise_session)
+    public function workoutSessions()
+    {
+        return $this->belongsToMany(Workout::class, 'exercise_session')
+                    ->withPivot('sets', 'reps', 'weight')
+                    ->withTimestamps();
+    }
+}

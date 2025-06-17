@@ -26,7 +26,25 @@ class MuscleGroupController extends Controller
 
     }
 
+    public function FindMuscleGroup(int $idMuscleGroup) {
+
+   
+             $test =musclegroup::find($idMuscleGroup);
+
+             if (!$test) {
+                return response() ->json("Can't find {$idMuscleGroup}",
+            404);
+             }
+
+             return response()->json($test);
+            
+        
+
+    }
+
     public function AddExerciece() {
+
+
 
     }
 }

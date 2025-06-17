@@ -9,19 +9,19 @@ class exercice extends Model
     use HasFactory;
 
         protected $table = 'exercice';
-       protected $fillable = ['name', 'category', 'description'];
+       protected $fillable = ['name' , 'category' , 'description'];
 
-    // Many-to-many with muscle groups
-    public function muscleGroups()
-    {
-        return $this->belongsToMany(MuscleGroup::class, 'exercice_muscle_group');
-    }
+        // Many-to-many with muscle groups
+        public function muscleGroups()
+        {
+            return $this->belongsToMany(MuscleGroup::class, 'exercice_musclegroup', 'exercice_id', 'muscle_group_id');
+        }
 
-    // Many-to-many with workout sessions via pivot table (exercise_session)
-    public function workoutSessions()
-    {
-        return $this->belongsToMany(Workout::class, 'exercise_session')
-                    ->withPivot('sets', 'reps', 'weight')
-                    ->withTimestamps();
-    }
+        // Many-to-many with workout sessions via pivot table (exercise_session)
+        public function workoutSessions()
+        {
+            return $this->belongsToMany(Workout::class, 'exercise_session')
+                        ->withPivot('sets', 'reps', 'weight')
+                        ->withTimestamps();
+        }
 }

@@ -8,10 +8,12 @@ class musclegroup extends Model
 {
     use HasFactory;
     protected $table = 'musclegroup';
-    protected $fillable = [ 'nom'];
+    protected $fillable = ['nom'];
 
-     public function type()
+     public function Exercices()
     {
-        return $this->belongsToMany(Exercice::class, 'exercice_muscle_group');
+        //return $this->belongsToMany(Exercice::class, 'exercice_muscle_group');
+         //return $this->belongsToMany(Exercice::class, 'exercice_muscle_group', 'exercice_id', 'muscle_group_id');
+         return $this->belongsToMany(Exercice::class, 'exercice_musclegroup','exercice_id', 'muscle_group_id');
     }
 }

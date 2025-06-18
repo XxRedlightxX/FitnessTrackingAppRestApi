@@ -11,6 +11,8 @@ class exercice extends Model
         protected $table = 'exercice';
        protected $fillable = ['name' , 'category' , 'description'];
 
+       public $timestamps = false;
+
         // Many-to-many with muscle groups
         public function muscleGroups()
         {

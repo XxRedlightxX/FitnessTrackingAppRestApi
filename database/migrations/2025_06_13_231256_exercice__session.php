@@ -11,11 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('exercise_session', function (Blueprint $table) {
+        Schema::create('exercice_session', function (Blueprint $table) {
             $table->id();
             $table->foreignId('workout_session_id')->constrained('WorkoutSession')->onDelete('cascade');
-            $table->foreignId('exercise_id')->constrained('exercice')->onDelete('cascade');
-            
+            $table->foreignId('exercice_id')->constrained('exercice')->onDelete('cascade');
             $table->integer('sets')->nullable();
             $table->integer('reps')->nullable();
             $table->decimal('weight', 5, 2)->nullable();
@@ -29,7 +28,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('exercise_session', function (Blueprint $table) {
+        Schema::table('exercice_session', function (Blueprint $table) {
             //
         });
     }

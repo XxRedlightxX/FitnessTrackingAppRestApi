@@ -16,6 +16,8 @@ return new class extends Migration
              $table->string('name')->unique();      
             $table->string('category')->nullable(); 
             $table->text('description')->nullable();
+
+            
         });
     }
 

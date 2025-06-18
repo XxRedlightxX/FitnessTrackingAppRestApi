@@ -22,7 +22,7 @@ class exercice extends Model
         // Many-to-many with workout sessions via pivot table (exercise_session)
         public function workoutSessions()
         {
-            return $this->belongsToMany(Workout::class, 'exercise_session')
+            return $this->belongsToMany(Workout::class, 'exercice_session', 'exercice_id', 'workout_session_id')
                         ->withPivot('sets', 'reps', 'weight')
                         ->withTimestamps();
         }

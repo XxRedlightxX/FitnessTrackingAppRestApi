@@ -8,7 +8,9 @@ class Workout extends Model
 {
     use HasFactory;
 
-       protected $fillable = ['name', 'date', 'user_id'];
+
+    protected $table = 'workoutsession';
+    protected $fillable = ['name', 'date'];
 
     // Each workout belongs to one user
     public function user()
@@ -19,7 +21,7 @@ class Workout extends Model
     // Each workout can have many exercises, via pivot table
     public function exercices()
     {
-        return $this->belongsToMany(Exercice::class, 'exercise_workout') // Pivot table
+        return $this->belongsToMany(Exercice::class, 'exercice_session', 'workout_session_id', 'exercice_id') // Pivot table
                     ->withPivot('sets', 'reps', 'weight')
                     ->withTimestamps();
     }

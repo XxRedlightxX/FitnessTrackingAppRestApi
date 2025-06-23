@@ -18,7 +18,7 @@ Route::post("muscleGroup/{muscleGroupId}/exercises",[MuscleGroupController::clas
 Route::get("/Workout",[WorkoutSessionController::class, 'index'] );
 
 
-Route::get("/user",[UserController::class, 'index'] );
+Route::get("/users/{user}",[UserController::class, 'index'] );
 
 Route::post("/user",[UserController::class, 'addUser'] );
 

@@ -23,3 +23,5 @@ Route::get("/users/{user}",[UserController::class, 'index'] );
 Route::post("/user",[UserController::class, 'addUser'] );
 
 Route::get("/user/{id}/Workout",[UserController::class, 'getUserWorkouts'] );
+
+Route::post("users/{user}/workouts/{workout}/exercises",[UserController::class, 'addExercise'] );

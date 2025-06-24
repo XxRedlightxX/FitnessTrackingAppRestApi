@@ -8,7 +8,10 @@ class set extends Model
 {
      protected $table = 'set';
 
-     protected $fillable = ['set_number','reps', 'weight'];
+     
+    protected $fillable = [
+        'set_number', 'reps', 'weight', 'exercice_session_id'
+    ];
 
 
      /*public function Excercice_Sessions() {

@@ -6,11 +6,16 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
-class ExerciceSession extends Pivot
+class ExerciceSession extends  Model
 {
     use HasFactory;
 
     protected $table = 'exercice_session';
+
+      protected $fillable = [
+        'workout_session_id',
+        'exercice_id'
+    ];
 
     public function workoutSession()
     {

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Workout;
+use App\Models\ExerciceSession;
+use App\Models\Set;
 use Illuminate\Support\Facades\Hash;
 class UserController extends Controller
 {
@@ -43,6 +45,53 @@ e
     }
 
 
+   // WorkoutSessionController.php
+public function addExercise(Request $request, User $user, Workout $workout)
+{
+    try {
+        // Verify workout ownership
+        if ($workout->user_id !== $user->id) {
+            return response()->json(['error' => 'Unauthorized access'], 403);
+        }
+
+        $validated = $request->validate([
+            'exercice_id' => 'required|exists:exercice,id',
+            'sets' => 'required|array|min:1',
+            'sets.*.weight' => 'required|numeric',
+            'sets.*.reps' => 'required|integer'
+        ]);
+
+        // Create exercise session first
+        $exerciseSession = ExerciceSession::create([
+            'workout_session_id' => $workout->id,
+            'exercice_id' => $validated['exercice_id']
+        ]);
+
+        // Create sets with the exercise session ID
+        $sets = collect($validated['sets'])->map(function($set,$index) use ($exerciseSession) {
+            return new Set([
+                'set_number' => $index + 1, // 👈 Add this
+                'weight' => $set['weight'],
+                'reps' => $set['reps'],
+                'exercice_session_id' => $exerciseSession->id
+            ]);
+        });
+
+        
+        $exerciseSession->sets()->saveMany($sets);
+
+        return response()->json([
+            'message' => 'Exercise and sets added successfully',
+            'data' => $exerciseSession->load('exercice', 'sets')
+        ], 201);
+
+    } catch (\Exception $e) {
+        return response()->json([
+            'error' => 'Operation failed',
+            'message' => $e->getMessage()
+        ], 500);
+    }
+}
 
 
     

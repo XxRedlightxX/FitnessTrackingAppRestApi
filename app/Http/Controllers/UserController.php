@@ -10,7 +10,7 @@ class UserController extends Controller
 {
     public function index(User $user)
 {
-    try {
+    /*try {
     
         //$workoutSessions = $user->workoutSessions()->with('exercices')->get();
         $user->load('workoutSessions.exercices');
@@ -22,8 +22,28 @@ e
             'message' => $e->getMessage(),
             'code' => $e->getCode(),
         ], 500);
+    }*/
+
+    try {
+        
+        $userWithWorkouts = User::with([
+            'workoutSessions.exerciceSessionPivots.exercice',
+            'workoutSessions.exerciceSessionPivots.sets',
+        ])->findOrFail($user->id);
+
+        return response()->json($userWithWorkouts, 200);
+
+    } catch (\Exception $e) {
+          return response()->json([
+            'error' => 'Something went wrong!',
+            'message' => $e->getMessage(),
+            'code' => $e->getCode(),
+        ], 500);
     }
-}
+    }
+
+
+
 
     
 

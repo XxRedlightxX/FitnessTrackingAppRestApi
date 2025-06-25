@@ -10,7 +10,7 @@ class Workout extends Model
 
 
     protected $table = 'workoutsession';
-    protected $fillable = ['name', 'date'];
+    protected $fillable = ['notes', 'date', 'user_id'];
 
     // Each workout belongs to one user
     public function user()

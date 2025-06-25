@@ -17,11 +17,25 @@ Route::post("muscleGroup/{muscleGroupId}/exercises",[MuscleGroupController::clas
 
 Route::get("/Workout",[WorkoutSessionController::class, 'index'] );
 
+Route::get("/Workouts",[WorkoutSessionController::class, 'GetAllWorkout'] );
+
+Route::post("/Workouts/{userid}",[WorkoutSessionController::class, 'AddWorkout'] );
+
+Route::put("/Workouts/{workoutid}",[WorkoutSessionController::class, 'UpdateWorkout'] );
+
+Route::delete("/Workouts/{workoutid}",[WorkoutSessionController::class, 'DeleteWorkout'] );
+
+
 
 Route::get("/users/{user}",[UserController::class, 'index'] );
 
 Route::post("/user",[UserController::class, 'addUser'] );
 
+Route::get("/user",[UserController::class, 'GetUserList'] );
+
+Route::delete("/user/{userid}",[UserController::class, 'DeleteUserById'] );
+
 Route::get("/user/{id}/Workout",[UserController::class, 'getUserWorkouts'] );
 
-Route::post("users/{user}/workouts/{workout}/exercises",[UserController::class, 'addExercise'] );
+Route::post("users/{user}/workouts/{workout}/exercises/{exercice}",[UserController::class, 'addExercise'] );
+

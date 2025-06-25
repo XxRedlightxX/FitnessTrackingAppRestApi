@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\exercice;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Workout;
@@ -44,9 +45,19 @@ e
     }
     }
 
+    public function GetUserList() {
+        try {
+         return response()->json(User::all());
+
+        
+        } catch(\Exception $e) {
+            response() -> json($e);
+        }
+    }
+
 
    // WorkoutSessionController.php
-public function addExercise(Request $request, User $user, Workout $workout)
+public function addExercise(Request $request, User $user, Workout $workout, exercice $exercice)
 {
     try {
         // Verify workout ownership
@@ -55,7 +66,7 @@ public function addExercise(Request $request, User $user, Workout $workout)
         }
 
         $validated = $request->validate([
-            'exercice_id' => 'required|exists:exercice,id',
+            //'exercice_id' => $exerciceid->id,
             'sets' => 'required|array|min:1',
             'sets.*.weight' => 'required|numeric',
             'sets.*.reps' => 'required|integer'
@@ -64,13 +75,13 @@ public function addExercise(Request $request, User $user, Workout $workout)
         // Create exercise session first
         $exerciseSession = ExerciceSession::create([
             'workout_session_id' => $workout->id,
-            'exercice_id' => $validated['exercice_id']
+            'exercice_id' => $exercice->id
         ]);
 
         // Create sets with the exercise session ID
         $sets = collect($validated['sets'])->map(function($set,$index) use ($exerciseSession) {
             return new Set([
-                'set_number' => $index + 1, // 👈 Add this
+                'set_number' => $index + 1, 
                 'weight' => $set['weight'],
                 'reps' => $set['reps'],
                 'exercice_session_id' => $exerciseSession->id
@@ -110,16 +121,13 @@ public function addExercise(Request $request, User $user, Workout $workout)
                 [
                     'name' => $request->name,
                     'email' => $request->email,
-                     'password' => Hash::make($request->password), // ← HASH the password!
+                    'password' => Hash::make($request->password), 
                 ]
             );
 
             return response()->json([
                 'user' => $user
             ],200);
-
-
-
         } catch(\Exception $e) {
             return response()->json(
                 [
@@ -134,7 +142,6 @@ public function addExercise(Request $request, User $user, Workout $workout)
     public function getUserWorkouts($userId)
     {
         try {
-
             $user = User::findOrFail($userId);
 
             if (!$user) {
@@ -154,6 +161,28 @@ public function addExercise(Request $request, User $user, Workout $workout)
                 'code' => $e->getCode(),
                 ],
             );
+        }
+    }
+
+    public function DeleteUserById($userid) {
+        try {
+            $user = User::findOrFail($userid); // Will throw if not found
+            $user->forceDelete();
+
+            return response()->json([
+                'message' => "User with ID {$userid} has been  deleted."
+            ], 200);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => "User with ID {$userid} not found."
+            ], 404);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'An unexpected error occurred.',
+                'details' => $e->getMessage() // Optional: remove in production
+            ], 500);
         }
     }
 }

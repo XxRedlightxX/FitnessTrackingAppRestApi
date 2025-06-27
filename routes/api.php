@@ -21,6 +21,8 @@ Route::get("/Workouts",[WorkoutSessionController::class, 'GetAllWorkout'] );
 
 Route::post("/Workouts/{userid}",[WorkoutSessionController::class, 'AddWorkout'] );
 
+Route::post("/Workouts/{workoutid}/excercice",[WorkoutSessionController::class, 'addExerciceToWorkout'] );
+
 Route::put("/Workouts/{workoutid}",[WorkoutSessionController::class, 'UpdateWorkout'] );
 
 Route::delete("/Workouts/{workoutid}",[WorkoutSessionController::class, 'DeleteWorkout'] );

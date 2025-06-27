@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\exercice;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\Workout;
+use App\Models\ExerciceSession;
 class WorkoutSessionController extends Controller
 {
     public function index() {
@@ -112,7 +114,44 @@ class WorkoutSessionController extends Controller
                 'message' => $e->getMessage()
             ], 500);
         }
+    }
+
+public function addExerciceToWorkout(Request $request, $workoutid)
+{
+    try {
+        $request->validate([
+            'exercice_id' => 'required|exists:exercice,id'
+        ]);
+
+        $workout = Workout::findOrFail($workoutid);
+
+      
+        if ($workout->exerciceSessionPivots()->where('exercice_id', $request->exercice_id)->exists()) {
+            return response()->json([
+                'error' => 'Exercise already in workout'
+            ], 409);
+        }
+
+        
+        $exerciseSession = $workout->exerciceSessionPivots()->create([
+            'exercice_id' => $request->exercice_id
+        ]);
+
+        return response()->json([
+            'message' => 'Exercise added successfully',
+            'data' => $exerciseSession
+        ], 201);
+
+    } catch (\Exception $e) {
+        return response()->json([
+            'error' => 'Something went wrong',
+            'message' => $e->getMessage()
+        ], 500);
+    }
 }
+
+
+
 
     
 

@@ -7,12 +7,19 @@ use App\Http\Controllers\UserController;
 
 Route::get("/exercice",[ExerciceController::class, 'index']);
 
+Route::post("/exercice",[ExerciceController::class, 'addExercice']);
+
+Route::put("/exercice/{exerciceid}",[ExerciceController::class, 'updateExercice']);
+
 
 Route::get("/muscleGroup",[MuscleGroupController::class, 'index']);
 
 Route::get("/muscleGroup/{id}",[MuscleGroupController::class, 'FindMuscleGroup']);
 
 Route::post("muscleGroup/{muscleGroupId}/exercises",[MuscleGroupController::class, 'addExerciseToMuscleGroup']);
+
+Route::delete("/muscleGroup/{idMuscleGroup}",[MuscleGroupController::class, 'deleteMuscleGroup']);
+
  
 
 Route::get("/Workout",[WorkoutSessionController::class, 'index'] );

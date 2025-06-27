@@ -53,6 +53,25 @@ public function index() {
     }
 
     
+    public function deleteMuscleGroup(int $idMuscleGroup) {
+
+            try {
+                $muscleGroup =musclegroup::findOrFail($idMuscleGroup);
+                $muscleGroup->forceDelete();
+               
+                return response()->json( $muscleGroup, 200);
+                 }catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json([
+                'error' => "User with ID {$idMuscleGroup} not found."
+            ], 404);
+
+        }
+             catch (\Exception $e) {
+                return response() -> json($e);
+            }
+    }
+
+    
     public function addExerciseToMuscleGroup(Request $request, $muscleGroupId)
     {
         try {

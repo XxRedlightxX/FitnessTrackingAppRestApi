@@ -116,39 +116,38 @@ class WorkoutSessionController extends Controller
         }
     }
 
-public function addExerciceToWorkout(Request $request, $workoutid)
-{
-    try {
-        $request->validate([
-            'exercice_id' => 'required|exists:exercice,id'
-        ]);
+    public function addExerciceToWorkout(Request $request, $workoutid)
+    {
+        try {
+            $request->validate([
+                'exercice_id' => 'required|exists:exercice,id'
+            ]);
 
-        $workout = Workout::findOrFail($workoutid);
-
-      
-        if ($workout->exerciceSessionPivots()->where('exercice_id', $request->exercice_id)->exists()) {
-            return response()->json([
-                'error' => 'Exercise already in workout'
-            ], 409);
-        }
+            $workout = Workout::findOrFail($workoutid);
 
         
-        $exerciseSession = $workout->exerciceSessionPivots()->create([
-            'exercice_id' => $request->exercice_id
-        ]);
+            if ($workout->exerciceSessionPivots()->where('exercice_id', $request->exercice_id)->exists()) {
+                return response()->json([
+                    'error' => 'Exercise already in workout'
+                ], 409);
+            }
 
-        return response()->json([
-            'message' => 'Exercise added successfully',
-            'data' => $exerciseSession
-        ], 201);
+            $exerciseSession = $workout->exerciceSessionPivots()->create([
+                'exercice_id' => $request->exercice_id
+            ]);
 
-    } catch (\Exception $e) {
-        return response()->json([
-            'error' => 'Something went wrong',
-            'message' => $e->getMessage()
-        ], 500);
+            return response()->json([
+                'message' => 'Exercise added successfully',
+                'data' => $exerciseSession
+            ], 201);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'Something went wrong',
+                'message' => $e->getMessage()
+            ], 500);
+        }
     }
-}
 
 
 

@@ -20,7 +20,7 @@ Route::post("muscleGroup/{muscleGroupId}/exercises",[MuscleGroupController::clas
 
 Route::delete("/muscleGroup/{idMuscleGroup}",[MuscleGroupController::class, 'deleteMuscleGroup']);
 
- 
+Route::post('/Workout/{workout}/exercises/{exerciseSession}/sets', [WorkoutSessionController::class, 'addSetToExerciseSession']);
 
 Route::get("/Workout",[WorkoutSessionController::class, 'index'] );
 
@@ -33,6 +33,8 @@ Route::post("/Workouts/{workoutid}/excercice",[WorkoutSessionController::class, 
 Route::put("/Workouts/{workoutid}",[WorkoutSessionController::class, 'UpdateWorkout'] );
 
 Route::delete("/Workouts/{workoutid}",[WorkoutSessionController::class, 'DeleteWorkout'] );
+
+
 
 
 

@@ -2,15 +2,90 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Service\UserService;
 use App\Models\exercice;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Workout;
 use App\Models\ExerciceSession;
 use App\Models\Set;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\UnauthorizedException;
 class UserController extends Controller
 {
+
+    protected $userService;
+
+      public function __construct(UserService $userService)
+    {
+        $this->userService = $userService;
+    }
+
+
+     public function getUserList()
+    {
+        $users = $this->userService->getAllUserList();
+        return response()->json($users, 200);
+    }
+    public function getUserById(int $userId)
+    {
+        try {
+            $user = $this->userService->getUserById($userId);
+            return response()->json([$user]);
+        } 
+        catch (ModelNotFoundException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => "User not found with ID {$userId}"
+            ], 404);
+        }
+        catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Server error'
+            ], 500);
+        }
+    }
+
+    public function addExercise2(Request $request, User $user,
+        Workout $workout, 
+        Exercice $exercice
+    ) {
+        try {
+            $validated = $request->validate([
+                'sets' => 'required|array|min:1|max:10',
+                'sets.*.weight' => 'required|numeric|min:0',
+                'sets.*.reps' => 'required|integer|min:1'
+            ]);
+
+            $result = $this->userService->addExerciseToWorkout(
+                $validated,
+                $user,
+                $workout,
+                $exercice
+            );
+
+            return response()->json([
+                'message' => 'Exercise added successfully',
+                'data' => $result
+            ], 201);
+
+        } catch (UnauthorizedException $e) {
+            return response()->json(['error' => $e->getMessage()], 403);
+        }  catch (\Exception $e) {
+            return response()->json(['error' =>  $e->getMessage()], 500);
+        }
+    }
+
+    public function CreateUser(User $user) {
+    
+        $result = $this->userService->addUser($user);
+        return response()->json($result);
+         
+
+    }
+
     public function index(User $user)
 {
     /*try {
@@ -45,16 +120,7 @@ e
     }
     }
 
-    public function GetUserList() {
-        try {
-         return response()->json(User::all());
-
-        
-        } catch(\Exception $e) {
-            response() -> json($e);
-        }
-    }
-
+  
 
    // WorkoutSessionController.php
 public function addExercise(Request $request, User $user, Workout $workout, exercice $exercice)
@@ -103,6 +169,13 @@ public function addExercise(Request $request, User $user, Workout $workout, exer
         ], 500);
     }
 }
+
+
+
+    
+
+
+
 
 
     

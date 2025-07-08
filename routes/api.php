@@ -42,11 +42,18 @@ Route::get("/users/{user}",[UserController::class, 'index'] );
 
 Route::post("/user",[UserController::class, 'addUser'] );
 
+
 Route::get("/user",[UserController::class, 'GetUserList'] );
+
+Route::get("/user/{userid}",[UserController::class, 'getUserbyId'] );
 
 Route::delete("/user/{userid}",[UserController::class, 'DeleteUserById'] );
 
 Route::get("/user/{id}/Workout",[UserController::class, 'getUserWorkouts'] );
 
-Route::post("users/{user}/workouts/{workout}/exercises/{exercice}",[UserController::class, 'addExercise'] );
 
+
+//Test
+Route::post("user/{user}/workouts/{workout}/exercises/{exercice}",[UserController::class, 'addExercise2'] );
+
+Route::post("/users",[UserController::class, 'CreateUser'] );
